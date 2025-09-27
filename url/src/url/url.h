@@ -9,11 +9,95 @@
 #define url_h
 
 #include "util.h"
+#include <map>
 
 struct url {
     // Typdef
 
-    enum http_t { no, secure, unsecured };
+    struct error: public std::exception {
+        // Constructors
+
+        error(const std::string what);
+
+        // Member Fields
+
+        const char* what() const throw();
+    private:
+        // Member Fields
+
+        std::string _what;
+    };
+
+    struct param {
+        // Typedef
+
+        using map = std::map<std::string, param>;
+
+        // Constructors
+
+        param();
+
+        param(const char* value);
+
+        param(const double value);
+
+        param(const std::string value);
+
+        param(const std::vector<std::string> value);
+
+        // Operators
+
+        operator                 double();
+
+        operator                 std::string();
+
+        operator                 std::vector<std::string>();
+
+        double                   operator=(const double value);
+
+        std::string              operator=(const std::string value);
+
+        std::vector<std::string> operator=(const std::vector<std::string> value);
+
+        bool                     operator==(const char* value);
+
+        bool                     operator==(const double value);
+
+        bool                     operator==(const std::string value);
+
+        bool                     operator==(const param value);
+
+        bool                     operator!=(const char* value);
+
+        bool                     operator!=(const double value);
+
+        bool                     operator!=(const std::string value);
+
+        bool                     operator!=(const param value);
+
+        // Member Functions
+
+        std::vector<std::string> list();
+
+        double                   number();
+
+        std::string              str() const;
+    private:
+        // Member Fields
+
+        std::vector<std::string> _list;
+        double                   _number;
+        bool                     _parsed = false;
+        std::string              _str;
+
+        // Member Functions
+
+        double                   _set(const double value);
+
+        std::string              _set(const std::string value);
+
+        std::vector<std::string> _set(const std::vector<std::string> value);
+    };
 
     class portinfo {
         // Constructors
@@ -33,30 +117,37 @@ struct url {
         
         // Member Functions
 
-        bool typed() const;
+        bool& typed();
 
-        int  value() const;
+        int&  value();
     };
 
     // Constructors
+
+    url();
 
     url(const std::string value);
 
     // Member Functions
 
-    std::string    host() const;
+    std::string& host();
 
-    http_t         http() const;
+    std::string& protocol();
 
-    class portinfo port() const;
+    param::map&  params();
 
-    std::string    target() const;
+    portinfo&    port();
+
+    std::string  str();
+
+    std::string& target();
 private:
     // Member Fields
 
     std::string    _host;
-    http_t         _http = no;
+    param::map     _params;
     class portinfo _port;
+    std::string    _protocol;
     std::string    _target;
 };
 
