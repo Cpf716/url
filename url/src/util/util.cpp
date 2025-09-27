@@ -26,8 +26,100 @@ bool is_int(const std::string value) {
     return true;
 }
 
+// 1. (\+|-)?
+// 2. (\+|-)?[0-9]+(\.[0-9]+)?
+// 3. (\+|-)?([0-9]+(\.[0-9]+)?|[0-9]*\.[0-9]+)((E|e)(\+|-)?[0-9]+)?
+bool is_number(const std::string value) {
+    if (value.empty())
+        return false;
+    
+    int i = 0;
+    
+    // leading positive (+) or negative (-) sign
+    if (value[i] == '+' || value[i] == '-')
+        i++;
+    
+    // find decimal point
+    int j = i;
+    
+    while (j < value.length() && value[j] != '.')
+        j++;
+    
+    // if no decimal point is found, start at the beginning (after the sign, if applicable)
+    // find exponent
+    int k = j == value.length() ? i : j;
+    
+    while (k < value.length() && !(value[k] == 'E' || value[k] == 'e'))
+        k++;
+    
+    // stop at the decimal point, if applicable; otherwise stop at the exponent, if applicable
+    int l = j < k ? j : k,
+        m = i;
+    
+    for (; m < l; m++)
+        if (!isdigit(value[m]))
+            return false;
+    
+    // count the number of digits between the beginning (after sign, if applicable) and the decimal point (if applicable)
+    // and the decimal point (if applicable) and the exponent (if applicable)
+    size_t n = l - i;
+    
+    //  after decimal (if applicable) and before exponent (if applicable)
+    if (j != value.length()) {
+        for (m = j + 1; m < k; m++)
+            if (!isdigit(value[m]))
+                return false;
+        
+        n += k - j - 1;
+    }
+    
+    // there are no digits between sign (if applicable) and decimal point (if applicable)
+    // and/or decimal point (if applicable) and exponent (if applicable)
+    if (n == 0)
+        return false;
+    
+    // after exponent (if applicable)
+    if (k != value.length()) {
+        size_t l = k + 1;
+        
+        if (l == value.length())
+            return false;
+        
+        // leading positive (+) or negative (-) sign
+        if (value[l] == '+' || value[l] == '-')
+            l++;
+        
+        if (l == value.length())
+            return false;
+        
+        for (; l < value.length(); l++)
+            if (!isdigit(value[l]))
+                return false;
+        // single digit
+    }
+    
+    return true;
+}
+
+std::string join(std::vector<std::string> values, std::string delimeter) {
+    std::ostringstream oss;
+
+    if (values.size()) {
+        for (size_t i = 0; i < values.size() - 1; i++)
+            oss << values[i] << delimeter;
+
+        oss << values[values.size() - 1];
+    }
+
+    return oss.str();
+}
+
 int parse_int(const std::string value) {
     return is_int(value) ? stoi(value) : INT_MIN;
+}
+
+double parse_number(const std::string value) {
+    return is_number(value) ? stod(value) : NAN;
 }
 
 std::vector<std::string> split(const std::string string, const std::string delimeter) {
@@ -71,16 +163,20 @@ void split(std::vector<std::string>& target, const std::string source, const std
     target.push_back(source.substr(start));
 }
 
-bool starts_with(const std::string text, const std::string pattern) {
-    if (text.length() < pattern.length())
-        return false;
-
-    size_t index = 0;
-
-    while (index < pattern.length() && text[index] == pattern[index])
-        index++;
-
-    return index == pattern.length();
+std::string trim(const std::string string) {
+    // Find leading whitespace
+    size_t start = 0;
+    
+    while (start < string.length() && isspace(string[start]))
+        start++;
+    
+    // Find trailing whitespace
+    size_t end = string.length();
+    
+    while (end > start && isspace(string[end - 1]))
+        end--;
+        
+    return string.substr(start, end - start);
 }
 
 std::string tolowerstr(const std::string string) {
