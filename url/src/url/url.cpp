@@ -198,7 +198,7 @@ double url::param::_set(const double value) {
     this->_str = std::to_string(this->number());
     this->_list = { this->str() };
 
-    return this->_number;
+    return this->number();
 }
 
 std::string url::param::_set(const std::string value) {
@@ -217,7 +217,7 @@ std::vector<std::string> url::param::_set(const std::vector<std::string> value) 
     this->_str = join(value, ",");
     this->_number = NAN;
 
-    return this->_list;
+    return this->list();
 }
 
 std::vector<std::string> url::param::list() const {
