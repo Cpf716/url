@@ -165,32 +165,16 @@ bool url::param::operator!=(const std::string value) {
 
 // Member Functions
 
-std::string& url::host() {
-    return this->_host;
-}
+std::string url::_query(std::ostringstream& oss) {
+    size_t               index = 0;
+    param::map::iterator it = this->params().begin();
 
-url::param::map& url::params() {
-    return this->_params;
-}
+    for (; index < this->params().size() - 1 && it != this->params().end(); index++, it++)
+        oss << (* it).first << "=" << (* it).second.str() << "&";
 
-std::string& url::protocol() {
-    return this->_protocol;
-}
-
-url::portinfo& url::port() {
-    return this->_port;
-}
-
-std::string& url::target() {
-    return this->_target;
-}
-
-bool& url::portinfo::typed() {
-    return this->_typed;
-}
-
-int& url::portinfo::value() {
-    return this->_value;
+    oss << (* it).first << "=" << (* it).second.str();
+        
+    return oss.str();
 }
 
 double url::param::_set(const double value) {
@@ -218,6 +202,40 @@ std::vector<std::string> url::param::_set(const std::vector<std::string> value) 
     this->_number = NAN;
 
     return this->list();
+}
+
+std::string& url::host() {
+    return this->_host;
+}
+
+url::param::map& url::params() {
+    return this->_params;
+}
+
+std::string& url::protocol() {
+    return this->_protocol;
+}
+
+url::portinfo& url::port() {
+    return this->_port;
+}
+
+std::string url::query() {
+    std::ostringstream oss;
+    
+    return this->_query(oss);
+}
+
+std::string& url::target() {
+    return this->_target;
+}
+
+bool& url::portinfo::typed() {
+    return this->_typed;
+}
+
+int& url::portinfo::value() {
+    return this->_value;
 }
 
 std::vector<std::string> url::param::list() const {
@@ -248,13 +266,7 @@ std::string url::str() {
     if (this->params().size()) {
         oss << "?";
 
-        size_t               index = 0;
-        param::map::iterator it = this->params().begin();
-
-        for (; index < this->params().size() - 1 && it != this->params().end(); index++, it++)
-            oss << (* it).first << "=" << (* it).second.str() << "&";
-
-        oss << (* it).first << "=" << (* it).second.str();
+        this->_query(oss);
     }
 
     return oss.str();

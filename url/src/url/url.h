@@ -136,6 +136,8 @@ struct url {
     param::map&  params();
 
     portinfo&    port();
+    
+    std::string  query();
 
     std::string  str();
 
@@ -148,6 +150,10 @@ private:
     class portinfo _port;
     std::string    _protocol;
     std::string    _target;
+    
+    // Member Functions
+    
+    std::string _query(std::ostringstream& oss);
 };
 
 #endif /* url_h */
