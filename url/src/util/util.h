@@ -25,7 +25,7 @@ std::vector<std::string> split(const std::string string, const std::string delim
 
 void                     split(std::vector<std::string>& target, const std::string source, const std::string delimeter);
 
-std::string              tolowerstr(const std::string string);
+std::string              tolowerstr(std::string string);
 
 std::string              trim(const std::string string);
 

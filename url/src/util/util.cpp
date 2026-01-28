@@ -12,7 +12,6 @@
 bool is_int(const std::string value) {
     int i = 0;
     
-    // leading positive (+) or negative (-) sign
     if (i != value.length() && (value[i] == '+' || value[i] == '-'))
         i++;
     
@@ -35,24 +34,24 @@ bool is_number(const std::string value) {
     
     int i = 0;
     
-    // leading positive (+) or negative (-) sign
+    // Leading positive (+) or negative (-) sign
     if (value[i] == '+' || value[i] == '-')
         i++;
     
-    // find decimal point
+    // Find decimal point
     int j = i;
     
     while (j < value.length() && value[j] != '.')
         j++;
     
-    // if no decimal point is found, start at the beginning (after the sign, if applicable)
-    // find exponent
+    // If no decimal point is found, start at the beginning (after the sign, if applicable)
+    // Find exponent
     int k = j == value.length() ? i : j;
     
     while (k < value.length() && !(value[k] == 'E' || value[k] == 'e'))
         k++;
     
-    // stop at the decimal point, if applicable; otherwise stop at the exponent, if applicable
+    // Stop at the decimal point, if applicable; otherwise stop at the exponent, if applicable
     int l = j < k ? j : k,
         m = i;
     
@@ -60,7 +59,7 @@ bool is_number(const std::string value) {
         if (!isdigit(value[m]))
             return false;
     
-    // count the number of digits between the beginning (after sign, if applicable) and the decimal point (if applicable)
+    // Count the number of digits between the beginning (after sign, if applicable) and the decimal point (if applicable)
     // and the decimal point (if applicable) and the exponent (if applicable)
     size_t n = l - i;
     
@@ -73,19 +72,19 @@ bool is_number(const std::string value) {
         n += k - j - 1;
     }
     
-    // there are no digits between sign (if applicable) and decimal point (if applicable)
+    // There are no digits between sign (if applicable) and decimal point (if applicable)
     // and/or decimal point (if applicable) and exponent (if applicable)
     if (n == 0)
         return false;
     
-    // after exponent (if applicable)
+    // After exponent (if applicable)
     if (k != value.length()) {
         size_t l = k + 1;
         
         if (l == value.length())
             return false;
         
-        // leading positive (+) or negative (-) sign
+        // Leading positive (+) or negative (-) sign
         if (value[l] == '+' || value[l] == '-')
             l++;
         
@@ -95,7 +94,7 @@ bool is_number(const std::string value) {
         for (; l < value.length(); l++)
             if (!isdigit(value[l]))
                 return false;
-        // single digit
+        // Single digit
     }
     
     return true;
@@ -164,13 +163,11 @@ void split(std::vector<std::string>& target, const std::string source, const std
 }
 
 std::string trim(const std::string string) {
-    // Find leading whitespace
     size_t start = 0;
     
     while (start < string.length() && isspace(string[start]))
         start++;
     
-    // Find trailing whitespace
     size_t end = string.length();
     
     while (end > start && isspace(string[end - 1]))
@@ -179,10 +176,8 @@ std::string trim(const std::string string) {
     return string.substr(start, end - start);
 }
 
-std::string tolowerstr(const std::string string) {
-    std::string str = string;
+std::string tolowerstr(std::string string) {
+    std::transform(string.begin(), string.end(), string.begin(), ::tolower);
 
-    std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-
-    return str;
+    return string;
 }

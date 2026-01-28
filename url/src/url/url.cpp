@@ -177,33 +177,6 @@ std::string url::_query(std::ostringstream& oss) {
     return oss.str();
 }
 
-double url::param::_set(const double value) {
-    this->_number = value;
-    this->_str = std::to_string(this->number());
-    this->_list = { this->str() };
-
-    return this->number();
-}
-
-std::string url::param::_set(const std::string value) {
-    this->_str = value;
-    this->_number = parse_number(this->str());
-    this->_list = split(this->str(), ",");
-
-    for (size_t i = 0; i < this->_list.size(); i++)
-        this->_list[i] = trim(this->_list[i]);
-
-    return this->str();
-}
-
-std::vector<std::string> url::param::_set(const std::vector<std::string> value) {
-    this->_list = value;
-    this->_str = join(value, ",");
-    this->_number = NAN;
-
-    return this->list();
-}
-
 std::string& url::host() {
     return this->_host;
 }
@@ -236,6 +209,33 @@ bool& url::portinfo::typed() {
 
 int& url::portinfo::value() {
     return this->_value;
+}
+
+double url::param::_set(const double value) {
+    this->_number = value;
+    this->_str = std::to_string(this->number());
+    this->_list = { this->str() };
+
+    return this->number();
+}
+
+std::string url::param::_set(const std::string value) {
+    this->_str = value;
+    this->_number = parse_number(this->str());
+    this->_list = split(this->str(), ",");
+
+    for (size_t i = 0; i < this->_list.size(); i++)
+        this->_list[i] = trim(this->_list[i]);
+
+    return this->str();
+}
+
+std::vector<std::string> url::param::_set(const std::vector<std::string> value) {
+    this->_list = value;
+    this->_str = join(value, ",");
+    this->_number = NAN;
+
+    return this->list();
 }
 
 std::vector<std::string> url::param::list() const {
