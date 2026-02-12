@@ -163,6 +163,10 @@ bool url::param::operator!=(const std::string value) {
     return !(*this == value);
 }
 
+url::portinfo::operator int() {
+    return this->value();
+}
+
 // Member Functions
 
 std::string url::_query(std::ostringstream& oss) {
