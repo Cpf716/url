@@ -125,7 +125,7 @@ std::vector<std::string> split(const std::string string, const std::string delim
     std::vector<std::string> result;
     size_t                   start = 0;
 
-    for (int end = 0; end <= (int)string.length() - (int)delimeter.length(); end++) {
+    for (int end = 0; end <= (int) string.length() - (int) delimeter.length(); end++) {
         size_t index = 0;
 
         while (index < delimeter.length() && string[end + index] == delimeter[index])
@@ -146,7 +146,7 @@ std::vector<std::string> split(const std::string string, const std::string delim
 void split(std::vector<std::string>& target, const std::string source, const std::string delimeter) {
     size_t start = 0;
 
-    for (int end = 0; end <= (int)source.length() - (int)delimeter.length(); end++) {
+    for (int end = 0; end <= (int) source.length() - (int) delimeter.length(); end++) {
         size_t index = 0;
 
         while (index < delimeter.length() && source[end + index] == delimeter[index])
