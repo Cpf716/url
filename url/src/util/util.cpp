@@ -63,7 +63,7 @@ bool is_number(const std::string value) {
     // and the decimal point (if applicable) and the exponent (if applicable)
     size_t n = l - i;
     
-    //  after decimal (if applicable) and before exponent (if applicable)
+    //  After decimal (if applicable) and before exponent (if applicable)
     if (j != value.length()) {
         for (m = j + 1; m < k; m++)
             if (!isdigit(value[m]))
@@ -119,6 +119,10 @@ int parse_int(const std::string value) {
 
 double parse_number(const std::string value) {
     return is_number(value) ? stod(value) : NAN;
+}
+
+int pow2(const int b) {
+    return b == 0 ? 1 : pow(2, ceil(log(b) / log(2)));
 }
 
 std::vector<std::string> split(const std::string string, const std::string delimeter) {
