@@ -125,6 +125,24 @@ struct url {
         int&  value();
     };
 
+    class query_string {
+        param::map _params;
+    public:
+        // Constructors
+        
+        query_string();
+
+        query_string(param::map params);
+
+        query_string(std::string value);
+
+        // Member Functions
+
+        param::map& params();
+
+        std::string str();
+    };
+
     // Constructors
 
     url();
@@ -133,6 +151,8 @@ struct url {
 
     // Member Functions
 
+    std::string  fully_qualified_host();
+
     std::string& host();
 
     std::string& protocol();
@@ -140,7 +160,7 @@ struct url {
     param::map&  params();
 
     portinfo&    port();
-    
+
     std::string  query();
 
     std::string  str();
@@ -154,10 +174,6 @@ private:
     class portinfo _port;
     std::string    _protocol;
     std::string    _target;
-    
-    // Member Functions
-    
-    std::string _query(std::ostringstream& oss);
 };
 
 #endif /* url_h */
